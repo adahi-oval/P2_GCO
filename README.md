@@ -19,7 +19,7 @@ python3 main.py -h
 
 ## Descripción del código
 
-#### Funciones de entrada y limpieza
+### Funciones de entrada y limpieza
 
 En primer lugar, todo lo necesario para el funcionamiento del programa se lee de los documentos pasados por el usuario. Para ello se utiliza un módulo creado por nosotros llamado `docReader`. En este módulo se encuentran 4 funciones en total. 
 
