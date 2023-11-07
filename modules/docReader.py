@@ -22,6 +22,19 @@ def readLema(filename):
 
   return listaTuplas
 
+
+def readCSV(filename):
+  datos = []
+
+  with open(filename, newline='') as tabla:
+    csvReader = csv.reader(tabla)
+    next(csvReader)
+    
+    for fila in csvReader:
+      datos.append([int(fila[0]), fila[1], int(fila[2]), float(fila[3]), float(fila[4])])
+
+  return datos
+
   
 # Funcion para limpiar el documento de stop words, le pasamos la lista de stopwords leida con readDocs
 # y el documento que queremos limpiar, busca las palabras que no coinciden y las mete en un array de palabras que luego une  
@@ -91,6 +104,35 @@ def crearTablaDocumento(tabla, nombreArchivo):
     # Escribe las filas de datos desde la tabla
     for fila in tabla:
       escritor.writerow(fila)
+
+def crearTablaCoseno(tabla, nombreCoseno):
+  
+  with open(nombreCoseno, mode="w", newline='') as tabla_coseno:
+
+    escritor = csv.writer(tabla_coseno)
+
+    escritor.writerow(["Primer Documento", "Segundo Documento", "Similaridad Coseno"])
+
+    for fila in tabla:
+      escritor.writerow(fila)
+
+def calcularCoseno(doc1, doc2):
+  magnitud1 = math.sqrt(sum(termino[1]**2 for termino in doc1))
+  magnitud2 = math.sqrt(sum(termino[1]**2 for termino in doc2))
+
+  norm1 = [(termino[0], termino[1]/magnitud1) for termino in doc1]
+  norm2 = [(termino[0], termino[1]/magnitud2) for termino in doc2]
+
+  similaridad = 0
+
+  for termino in norm1:
+    for otherTermino in norm2:
+      if termino[0] == otherTermino[0]:
+        similaridad += (termino[1] * otherTermino[1])
+
+  return similaridad
+
+
 
 def terminoPerteneceMatriz(termino, matriz):
   for fila in matriz:

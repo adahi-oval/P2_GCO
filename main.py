@@ -10,6 +10,8 @@ outputname = args.output
 stopname = args.stopwords
 lemaname = args.lematization
 
+cosinename = args.cosine
+
 # Funcion principal del programa
 def main():
   documentos = functions.readDocs(filename)
@@ -41,5 +43,24 @@ def main():
     functions.crearTablaDocumento(tablaDocumento, "tablas/" + outputname + str(j) + ".csv")
     j = j + 1
 
+  tablaCoseno = []
+  for i in range(len(palabrasPorDocumento)):
+
+    nombreDoc1 = "tablas/" + outputname + str(i) + ".csv"
+    doc1 = functions.readCSV(nombreDoc1)
+    vectorDoc1 = [(row[1], float(row[4])) for row in doc1]
+
+    for j in range(len(palabrasPorDocumento)):
+
+      nombreDoc2 = "tablas/" + outputname + str(j) + ".csv"
+      doc2 = functions.readCSV(nombreDoc2)
+      vectorDoc2 = [(row[1], float(row[4])) for row in doc2]
+
+      if j == i:
+        continue
+      else:
+        tablaCoseno.append([outputname + str(i) + ".csv", outputname + str(j) + ".csv", functions.calcularCoseno(vectorDoc1, vectorDoc2)])
+  
+  functions.crearTablaCoseno(tablaCoseno, "tablas/" + cosinename + ".csv")
 
 main()
