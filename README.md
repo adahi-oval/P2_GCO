@@ -2,6 +2,21 @@
 
 ## Instrucciones
 
+Para el correcto funcionamiento del programa solo es necesario tener instalado `Python 3`. Esto se puede hacer en sistemas Linux con el siguiente comando:
+```bash
+sudo apt install python3
+```
+
+La ejecución se efectúa con este comando:
+```bash
+python3 main.py [argumentos]
+```
+
+Para el correcto funcionamiento del programa se le deben pasar tres argumentos. Éstos se pueden ver con el comando:
+```bash
+python3 main.py -h
+```
+
 ## Descripción del código
 
 En primer lugar, todo lo necesario para el funcionamiento del programa se lee de los documentos pasados por el usuario. Para ello se utiliza un módulo creado por nosotros llamado `docReader`. En este módulo se encuentran 4 funciones en total. 
