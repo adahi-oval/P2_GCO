@@ -1,4 +1,7 @@
 import json
+import re
+import math
+import csv
 
 # Como cada linea es un documento, los separa por lineas usando \n como marcador. Crea un array de documentos
 def readDocs(filename):
@@ -50,12 +53,81 @@ def lematizacion(cleanDoc, listaLematizacion):
 
   return updatedDoc
 
+def separarPalabras(texto):
+  # Utiliza una expresión regular para encontrar palabras (secuencias de letras y apóstrofes)
+  palabras = re.findall(r'\b\w+\b', texto)
+  return palabras
 
-documentos = readDocs("documents-01.txt")
-stopwords = readDocs("stop-words-en.txt")
-listalema = readLema("corpus-en.txt")
+def agregarTerminosConjunto(conjuntoTerminos, arrayTerminos):
+  for palabra in arrayTerminos:
+    conjuntoTerminos.add(palabra)
+  return conjuntoTerminos
 
-cleanDoc1 = clearStopWords(documentos[1], stopwords)
-lemaDoc1 = lematizacion(cleanDoc1, listalema)
+def convertirAMinusculas(cadenas):
+  # Aplica lower() a cada cadena en el vector
+  cadenasMinusculas = [cadena.lower() for cadena in cadenas]
+  return cadenasMinusculas
 
-print(lemaDoc1)
+# Cuenta cuántas veces aparece el término en el documento
+def calcularTF(termino, documento):
+  tf = documento.count(termino)
+  return tf
+
+def calcularIDF(termino, palabrasPorDocumentos):
+  # Cuenta cuántos documentos contienen la termino
+  numeroDocumentosConTermino = sum(1 for documento in palabrasPorDocumentos if termino in documento)
+  # Calcula el IDF utilizando el logaritmo neperiano
+  idf = math.log(len(palabrasPorDocumentos) / (numeroDocumentosConTermino))
+  return idf
+
+def crearTablaDocumento(tabla, nombreArchivo):
+  # Abre el archivo en modo de escritura
+  with open(nombreArchivo, mode='w', newline='') as archivo_csv:
+    # Crea un escritor CSV
+    escritor = csv.writer(archivo_csv)
+    # Escribe la fila de encabezado
+    escritor.writerow(["Índice del término", "Término", "TF", "IDF", "TF-IDF"])
+    
+    # Escribe las filas de datos desde la tabla
+    for fila in tabla:
+      escritor.writerow(fila)
+
+def terminoPerteneceMatriz(termino, matriz):
+  for fila in matriz:
+    if termino == fila[1]:
+      return True
+  return False
+
+# Funcion principal del programa
+def main():
+  documentos = readDocs("documents-01.txt")
+  stopwords = readDocs("stop-words-en.txt")
+  listalema = readLema("corpus-en.txt")
+  palabrasPorDocumento = []
+  # Genera tabla de palabras separadas por documentos
+  for document in documentos:
+    cleanDoc1 = clearStopWords(document, stopwords)
+    documentoLimpio = lematizacion(cleanDoc1, listalema)
+    palabrasPorDocumento.append(convertirAMinusculas(separarPalabras(documentoLimpio)))
+  
+  # Creo un set con los terminos de los documentos
+  # setTerminos = set()
+  # for documento in palabrasPorDocumento:
+  #   setTerminos = agregarTerminosConjunto(setTerminos, documento)
+  
+  j = 0
+
+  for documento in palabrasPorDocumento:
+    tablaDocumento = [] 
+    i = 0
+    for termino in documento:
+      if not terminoPerteneceMatriz(termino, tablaDocumento):
+        tf = calcularTF(termino, documento)
+        idf = calcularIDF(termino, palabrasPorDocumento)
+        tablaDocumento.append([i, termino, tf, idf, tf * idf])
+        i = i + 1
+    crearTablaDocumento(tablaDocumento, "tablas/Documento" + str(j) + ".csv")
+    j = j + 1
+
+
+main()
