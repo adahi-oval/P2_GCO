@@ -1,8 +1,0 @@
-Teniendo cuenta lo anterior se me pide:
-Para cada documento, tabla con las siguientes columnas:
-
-Índice del término.
-Término.
-TF.
-IDF.
-TF-IDF.

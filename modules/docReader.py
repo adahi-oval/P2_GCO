@@ -97,37 +97,3 @@ def terminoPerteneceMatriz(termino, matriz):
     if termino == fila[1]:
       return True
   return False
-
-# Funcion principal del programa
-def main():
-  documentos = readDocs("documents-01.txt")
-  stopwords = readDocs("stop-words-en.txt")
-  listalema = readLema("corpus-en.txt")
-  palabrasPorDocumento = []
-  # Genera tabla de palabras separadas por documentos
-  for document in documentos:
-    cleanDoc1 = clearStopWords(document, stopwords)
-    documentoLimpio = lematizacion(cleanDoc1, listalema)
-    palabrasPorDocumento.append(convertirAMinusculas(separarPalabras(documentoLimpio)))
-  
-  # Creo un set con los terminos de los documentos
-  # setTerminos = set()
-  # for documento in palabrasPorDocumento:
-  #   setTerminos = agregarTerminosConjunto(setTerminos, documento)
-  
-  j = 0
-
-  for documento in palabrasPorDocumento:
-    tablaDocumento = [] 
-    i = 0
-    for termino in documento:
-      if not terminoPerteneceMatriz(termino, tablaDocumento):
-        tf = calcularTF(termino, documento)
-        idf = calcularIDF(termino, palabrasPorDocumento)
-        tablaDocumento.append([i, termino, tf, idf, tf * idf])
-        i = i + 1
-    crearTablaDocumento(tablaDocumento, "tablas/Documento" + str(j) + ".csv")
-    j = j + 1
-
-
-main()
