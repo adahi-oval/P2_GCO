@@ -19,6 +19,8 @@ python3 main.py -h
 
 ## Descripción del código
 
+#### Funciones de entrada y limpieza
+
 En primer lugar, todo lo necesario para el funcionamiento del programa se lee de los documentos pasados por el usuario. Para ello se utiliza un módulo creado por nosotros llamado `docReader`. En este módulo se encuentran 4 funciones en total. 
 
 Las dos primeras funciones, `readDocs` y `readLema` se utilizan para formar las listas en `Python` que utilizaremos a lo largo del programa. La función `readDocs` lee el fichero con los documentos y crea una lista con ellos, también se utiliza para leer la lista de ***stop words*** para crear una lista con ellas. La función `readLema` lee el documento con el cual se crea una lista de tuplas de dos elementos, aprovechando el formato similar al de un diccionario **`JSON`**.
